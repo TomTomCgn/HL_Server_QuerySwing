@@ -93,25 +93,21 @@ public class QueryClient {
     }
     
     
-    public void PlaySound () throws UnsupportedAudioFileException, IOException, LineUnavailableException {
-
-
-    	File myFile=new File("D:/wee3.wav");
-    	URL soundURL = myFile.toURI().toURL();
-
-
-    	// URL soundURL = "file:///D:/wee3.wav"; //ist zu initialisieren
+    public void PlaySound () throws UnsupportedAudioFileException, IOException, LineUnavailableException, InterruptedException {
+    	String audioFilePath = "E:/wee3.wav";
+    	File audioFile = new File(audioFilePath);
+    	AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+    	AudioFormat format = audioStream.getFormat();
     	 
-    	AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundURL);
-    	BufferedInputStream bufferedInputStream = new BufferedInputStream(audioInputStream);
-    	        AudioFormat af = audioInputStream.getFormat();
-    	        int size = (int) (af.getFrameSize() * audioInputStream.getFrameLength());
-    	        byte[] audio = new byte[size];
-    	        DataLine.Info info = new DataLine.Info(Clip.class, af, size);
-    	            bufferedInputStream.read(audio, 0, size);
-    	            Clip clip = (Clip) AudioSystem.getLine(info);
-    	            clip.open(af, audio, 0, size);
-    	            clip.start();
+    	DataLine.Info info = new DataLine.Info(Clip.class, format);
+    	Clip audioClip = (Clip) AudioSystem.getLine(info);
+    	audioClip.open(audioStream);
+    	audioClip.start();
+    	
+        Thread.sleep(1000);
+         
+        audioClip.close();
+        
 	}
     
     
